@@ -29,3 +29,4 @@
 6. Download the [WebDriver binary](https://www.selenium.dev/documentation/en/webdriver/driver_requirements/) supported by your browser and place it in the System PATH.
    - [Open cmd as admin] `setx /m path "%path%;C:\drivers\chromedriver\91.0.4472.19"`
 7. `mvn clean test`
+8. Also added `slf4j` and `lombok` in `pom.xml`
