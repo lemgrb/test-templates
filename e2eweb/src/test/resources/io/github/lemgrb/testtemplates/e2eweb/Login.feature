@@ -1,7 +1,7 @@
 Feature: Login
 
   Rule: Users with valid credentials can log in
-
+    
     Scenario: Valid username and password
       Given user visits "http://localhost:1337/admin" website
       Then "Email" is displayed

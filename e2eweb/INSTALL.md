@@ -30,3 +30,8 @@
    - [Open cmd as admin] `setx /m path "%path%;C:\drivers\chromedriver\91.0.4472.19"`
 7. `mvn clean test`
 8. Also added `slf4j` and `lombok` in `pom.xml`
+9. Add the ff. in `~.bash_profile`
+```bash
+export SAUCE_USERNAME="your Sauce username"
+export SAUCE_ACCESS_KEY="your Sauce access key"
+```
