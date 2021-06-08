@@ -21,7 +21,6 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-    - name: Switch to /e2eweb director
-      run: cd e2eweb
     - name: Unit test with Maven
-      run: mvn clean test
+      working-directory: ./e2eweb
+      run: mvn clean test     
