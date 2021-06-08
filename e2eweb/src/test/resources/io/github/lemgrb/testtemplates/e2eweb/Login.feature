@@ -37,4 +37,3 @@ Feature: Login
       And "Password" is displayed
       And user clicks "Log in"
       Then "This value is required" is displayed
-
