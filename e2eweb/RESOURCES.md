@@ -1,0 +1,4 @@
+- https://www.youtube.com/watch?v=ipjl49Hgsg8
+- https://github.com/saucelabs-training/demo-java/tree/master/selenium-cucumber-examples
+- https://maven.apache.org/surefire/maven-failsafe-plugin/usage.html
+- https://howtodoinjava.com/design-patterns/creational/builder-pattern-in-java/

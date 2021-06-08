@@ -4,8 +4,12 @@ import com.saucelabs.saucebindings.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.github.lemgrb.testtemplates.e2eweb.utilities.ExcelTestDataReader;
+import io.github.lemgrb.testtemplates.e2eweb.utilities.ProjectProperties;
+import io.github.lemgrb.testtemplates.e2eweb.utilities.TestData;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,19 +20,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.time.Duration;
-import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertTrue;
 
 @Slf4j
 public class StepDefinitions {
 
-    private boolean isLocal;
-
+    protected ExcelTestDataReader excelTestDataReader;
+    protected ProjectProperties projectProperties;
     protected WebDriverWait wait;
     protected WebDriver driver;
+    protected String currentScenario;
+    protected String currentFeature;
 
     protected static ThreadLocal<SauceSession> session = new ThreadLocal<>();
     protected static ThreadLocal<SauceOptions> options = new ThreadLocal<>();
@@ -38,32 +45,33 @@ public class StepDefinitions {
     }
 
     public WebDriver getDriver() {
-        if(isLocal)
+        if(projectProperties.getEnvironment().equalsIgnoreCase("local"))
             return driver;
         return getSession().getDriver();
     }
 
+    // TODO: Refactor
+    private String getFeatureName(String scenarioId) {
+        Pattern pattern = Pattern.compile(".*/(.*).feature:[0-9]*");
+        Matcher matcher = pattern.matcher(scenarioId);
+        if(matcher.find())
+            return matcher.group(1);
+        return scenarioId;
+    }
+
     @Before
     public void setup(Scenario scenario) throws Exception {
+        this.currentScenario = scenario.getName();
+        this.currentFeature = getFeatureName(scenario.getId());
 
-        isLocal = !System.getProperty("env").equalsIgnoreCase("saucelabs");
-        String config = isLocal?
-          "config.properties":"config.saucelabs.properties";
+        projectProperties = new ProjectProperties();
+        excelTestDataReader = ExcelTestDataReader.getExcelTestDataReader();
 
-        log.info("▒ USING CONFIGURATION FILE: " + config);
+        if(projectProperties.getEnvironment().equalsIgnoreCase("saucelabs")) {
 
-        // TODO: Add to separate class
-        Properties prop = new Properties();
-        FileInputStream ip = new FileInputStream(config);
-        prop.load(ip);
+          log.info("▒▒▒ SAUCE_USERNAME: " + ((System.getenv("SAUCE_USERNAME")!=null && !System.getenv("SAUCE_USERNAME").isBlank())?"SAUCE_USERNAME OK":"SAUCE_USERNAME NOT FOUND!!!"));
+          log.info("▒▒▒ SAUCE_ACCESS_KEY: " + ((System.getenv("SAUCE_ACCESS_KEY")!=null && !System.getenv("SAUCE_ACCESS_KEY").isBlank())?"SAUCE_ACCESS_KEY OK":"SAUCE_ACCESS_KEY NOT FOUND!!!"));
 
-        String platform = prop.getProperty("platform");
-
-        log.info("▒ PLATFORM: " + platform);
-        log.info("▒ SAUCE_USERNAME: " + System.getenv("SAUCE_USERNAME")!=null?"FOUND":"NOT FOUND");
-        log.info("▒ SAUCE_ACCESS_KEY: " + System.getenv("SAUCE_ACCESS_KEY")!=null?"FOUND":"NOT FOUND");
-
-        if(!isLocal) {
           options.set(new SauceOptions());
           options.get().setName(scenario.getName());
 
@@ -71,6 +79,7 @@ public class StepDefinitions {
               options.get().setBuild("Build Time: " + System.getenv("START_TIME"));
           }
 
+          String platform;
           if (System.getProperty("platform") != null) {
               platform = System.getProperty("platform");
           } else {
@@ -108,24 +117,30 @@ public class StepDefinitions {
 
           session.set(sauceSession);
           getSession().start();
-          wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-        } else {
+        } else if (projectProperties.getEnvironment().equalsIgnoreCase("local")){
+            String platform;
+            if (System.getProperty("platform") != null) {
+                platform = System.getProperty("platform");
+            } else {
+                platform = "chrome";
+            }
 
-          switch(platform) {
-            case "firefox":
-              driver = new FirefoxDriver();
-              break;
-            case "edge":
-              driver = new EdgeDriver();
-              break;
-            default:
-              driver = new ChromeDriver();
-              break;
-          }
+              switch(platform) {
+                case "firefox":
+                  driver = new FirefoxDriver();
+                  break;
+                case "edge":
+                  driver = new EdgeDriver();
+                  break;
+                default:
+                  driver = new ChromeDriver();
+                  break;
+              }
 
         }
 
+        wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         getDriver().manage().window().maximize();
     }
 
@@ -158,9 +173,40 @@ public class StepDefinitions {
         assertTrue(element.isDisplayed());
     }
 
+    @Given("user visits a website")
+    public void user_visits_a_website() throws Exception {
+        // This step is expected to pull data from Excel
+        log.info("▒▒▒ CURRENT FEATURE " + this.currentFeature);
+        TestData testData = new TestData.Builder()
+                .sheet(this.currentFeature)
+                .row(this.currentScenario)
+                .column("Website")
+                .build();
+        String website = ExcelTestDataReader.getExcelTestDataReader().getTestData(testData);
+        log.info("▒▒▒ WEBSITE: " + website);
+        getDriver().get(website);
+    }
+
+    @Then("the page is displayed")
+    public void the_page_is_displayed() throws Exception {
+
+        TestData testData = new TestData.Builder()
+                .sheet(this.currentFeature)
+                .row(this.currentScenario)
+                .column("Text to verify")
+                .build();
+        String textToVerify = ExcelTestDataReader.getExcelTestDataReader().getTestData(testData);
+        log.info("▒▒▒ textToVerify: " + textToVerify);
+        log.info("▒▒▒ LOCATOR: " + ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'"+textToVerify+"')]")));
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'"+textToVerify+"')]")));
+        assertTrue(element.isDisplayed());
+    }
+
+
+
     @After
     public void tearDown(Scenario scenario) {
-        if(isLocal) {
+        if(projectProperties.getEnvironment().equalsIgnoreCase("local")) {
           try {
               driver.close();
               driver.quit();
@@ -172,5 +218,4 @@ public class StepDefinitions {
           getSession().stop(!scenario.isFailed());
         }
     }
-
 }

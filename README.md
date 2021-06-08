@@ -1,4 +1,7 @@
 # test-templates
+
+[![Java CI with Maven](https://github.com/lemgrb/testtemplates/actions/workflows/maven.yml/badge.svg)](https://github.com/lemgrb/testtemplates/actions/workflows/maven.yml)
+
 Test automation frameworks examples/scaffolding/templates
 
 ## Folder structure

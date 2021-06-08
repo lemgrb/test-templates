@@ -35,3 +35,22 @@
 export SAUCE_USERNAME="your Sauce username"
 export SAUCE_ACCESS_KEY="your Sauce access key"
 ```
+
+## Drivers Setup
+
+## Linux
+
+### Firefox
+1. Download [GeckoDriver](https://github.com/mozilla/geckodriver/releases)
+2. Extract `tar -xvfz geckodriver*`
+3. Add exec flag: `chmod+x geckodriver`
+4. `export PATH=$PATH:/path/to/geckodriver` or `sudo mv geckodriver /usr/local/bin/`
+5. If you don't want to add on path, set programmatically as `System.setProperty("webdriver.gecko.driver", "/path/to/driver")
+
+Source: [How to install Geckodriver in Ubuntu?](https://askubuntu.com/questions/870530/how-to-install-geckodriver-in-ubuntu)
+Source 2: [Driver requirements](https://www.selenium.dev/documentation/en/webdriver/driver_requirements/)
+
+### Chrome
+
+1. Download [ChromeDriver](https://chromedriver.chromium.org/downloads)
+2. See 2-5 for Firefox
