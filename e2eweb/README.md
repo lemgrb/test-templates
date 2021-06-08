@@ -1,36 +1,102 @@
 See [INSTALL.md](INSTALL.md) for project setup from scratch.
 
-Demo application : [Next.js E-commerce Starter](https://strapi.io/starters/strapi-starter-next-js-ecommerce)
+Demo application : [Next.js E-commerce Starter](https://strapi.io/starters/strapi-starter-next-js-ecommerce) --> The backend (localhost:1337) of this starter web app is used in the tests.
 
-## Drivers
+> **Environment** (local, saucelabs) and **platform** (default, chrome, etc) are two properties to be read from command line or environment variables. All other settings are retrieved from config.${ENVIRONMENT}.properties
 
-## Linux
+## Project-specific Environment Variables
 
-### Firefox
-1. Download [GeckoDriver](https://github.com/mozilla/geckodriver/releases)
-2. Extract `tar -xvfz geckodriver*`
-3. Add exec flag: `chmod+x geckodriver`
-4. `export PATH=$PATH:/path/to/geckodriver` or `sudo mv geckodriver /usr/local/bin/`
-5. If you don't want to add on path, set programmatically as `System.setProperty("webdriver.gecko.driver", "/path/to/driver")
+### [For saucelabs] Remote run
+```bash
+export SAUCE_USERNAME="your Sauce username"
+export SAUCE_ACCESS_KEY="your Sauce access key"
+```
 
-Source: [How to install Geckodriver in Ubuntu?](https://askubuntu.com/questions/870530/how-to-install-geckodriver-in-ubuntu)
-Source 2: [Driver requirements](https://www.selenium.dev/documentation/en/webdriver/driver_requirements/)
+### [For cucumber] Publishing on reports.cucumber.io
+```bash
+export CUCUMBER_PUBLISH_ENABLED=true
+export CUCUMBER_PUBLISH_TOKEN=XXXX 
+```
 
-### Chrome
+## To run unit tests
 
-1. Download [ChromeDriver](https://chromedriver.chromium.org/downloads)
-2. See 2-5 for Firefox
+Unit tests file format: ExcelTestDataReader**Test**.java
 
-## TEST EXECUTION
+```bash
+mvn clean test
+```
 
-`$ mvn [-Denv=local] clean test`
+The ff. non-out of the box features are unit tested:
+1. ExcelTestDataReader
+
+## Run Integration Test
+
+Integration tests file format: RunCucumber**IT**.java (IT for Integration Test)
+
+```bash
+mvn -Dcucumber.filter.tags="@internet" clean test failsafe:integration-test
+```
+
+### Specify *environment* in command line
+
+```bash
+mvn [-DENVIRONMENT=local] failsafe:integration-test`
+```
+
+Supported Environments: 
+
+1. `local` (default)
+2. `saucelabs`
+
+When `local` is selected, `config.local.properties` will be used.
+
+When `saucelabs` is selected, `config.saucelabs.properties` will be used.
+
+
+### Specify *platform* in command line
+```bash
+mvn [-Dplatform=default] failsafe:integration-test
+```
+
+Local platforms:
+- chrome
+- firefox
+- edge
+
+Saucelabs platforms:
+- windows_10_edge
+- mac_sierra_chrome
+- windows_8_ff
+- windows_8_1_ie
+- mac_mojave_safari
 
 ### Run a single feature file
 
-`$ mvn test -Dcucumber.features="src/test/features/com/perspecsys/salesforce/featurefiles/Account.feature"`
+```bash
+mvn -Dcucumber.features="src/test/features/com/perspecsys/salesforce/featurefiles/Account.feature" failsafe:integration-test
+```
 
 ### Run tagged scenarios
 
-`$ mvn -Dcucumber.filter.tags="@smoke" test`
+```bash
+mvn -Dcucumber.filter.tags="@internet" failsafe:integration-test
+```
 
+### Putting them all together
 
+Run all Gherkin Scenarios tagged as `@internet` on Saucelabs
+
+```bash
+mvn -Dcucumber.filter.tags="@internet" \
+-Denvironment=saucelabs \
+-Dplatform=mac_sierra_chrome \
+ clean test failsafe:integration-test
+```
+
+## Test Data File Format
+
+The Excel test data is located at `src/test/resources/TestData.xlsx`.
+
+Current limitation: 
+- **All cells must be formatted as String**
+- Every row must have equal number of columns

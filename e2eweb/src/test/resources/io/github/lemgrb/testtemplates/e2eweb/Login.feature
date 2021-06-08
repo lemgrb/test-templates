@@ -1,19 +1,19 @@
 Feature: Login
 
   Rule: Users with valid credentials can log in
-    
-    Scenario: Valid username and password
+
+    Scenario: TC001 Valid username and password
       Given user visits "http://localhost:1337/admin" website
       Then "Email" is displayed
       And "Password" is displayed
       When user enters "test@mailinator.com" email
       And user enters "TestPass123" password
       And user clicks "Log in"
-      Then "Hi LEM!" is displayed
+      Then "Hi Lem!" is displayed
 
   Rule: Users with invalid credentials cannot log in
 
-    Scenario: Non-existing user
+    Scenario: TC002 Non-existing user
       Given user visits "http://localhost:1337/admin" website
       Then "Email" is displayed
       And "Password" is displayed
@@ -22,7 +22,7 @@ Feature: Login
       And user clicks "Log in"
       Then "Invalid credentials" is displayed
 
-    Scenario: Existing user, Invalid password
+    Scenario: TC003 Existing user, Invalid password
       Given user visits "http://localhost:1337/admin" website
       Then "Email" is displayed
       And "Password" is displayed
@@ -31,7 +31,7 @@ Feature: Login
       And user clicks "Log in"
       Then "Invalid credentials" is displayed
 
-    Scenario: Blank username and password
+    Scenario: TC004 Blank username and password
       Given user visits "http://localhost:1337/admin" website
       Then "Email" is displayed
       And "Password" is displayed
