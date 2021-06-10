@@ -138,5 +138,43 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-checkstyle-plugin</artifactId>
+              <version>3.1.2</version>
+              <dependencies>
+                <dependency>
+                  <groupId>com.puppycrawl.tools</groupId>
+                  <artifactId>checkstyle</artifactId>
+                  <version>8.43</version>
+                </dependency>
+              </dependencies>
+              <configuration>
+                <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                <testSourceDirectories>src/test</testSourceDirectories>
+                <encoding>UTF-8</encoding>
+                <configLocation>google_checks.xml</configLocation>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
