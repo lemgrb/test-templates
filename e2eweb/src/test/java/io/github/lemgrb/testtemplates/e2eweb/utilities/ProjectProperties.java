@@ -13,30 +13,30 @@ import java.util.Properties;
 @Slf4j
 public class ProjectProperties {
 
-    @Getter
-    @Setter
-    private String environment;
+  @Getter
+  @Setter
+  private String environment;
 
-    @Getter
-    @Setter
-    private Properties properties = new Properties();
+  @Getter
+  @Setter
+  private Properties properties = new Properties();
 
-    private Map<String, String> configMap = new HashMap<String, String>();
+  private Map<String, String> configMap = new HashMap<String, String>();
 
-    public ProjectProperties() throws IOException {
+  public ProjectProperties() throws IOException {
 
-        configMap.put("local","config.local.properties");
-        configMap.put("saucelabs","config.saucelabs.properties");
+    configMap.put("local", "config.local.properties");
+    configMap.put("saucelabs", "config.saucelabs.properties");
 
-        // `environment` is read from POM.XML
+    // `environment` is read from POM.XML
 
-        setEnvironment(System.getProperty("environment"));
+    setEnvironment(System.getProperty("environment"));
 
-        log.info("▒▒▒ LOADING CONFIGURATION FILE: " + configMap.get(getEnvironment()));
+    log.info("▒▒▒ LOADING CONFIGURATION FILE: " + configMap.get(getEnvironment()));
 
-        FileInputStream ip = new FileInputStream(configMap.get(getEnvironment()));
+    FileInputStream ip = new FileInputStream(configMap.get(getEnvironment()));
 
-        properties.load(ip);
-    }
+    properties.load(ip);
+  }
 
 }
