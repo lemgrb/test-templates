@@ -54,3 +54,13 @@ Source 2: [Driver requirements](https://www.selenium.dev/documentation/en/webdri
 
 1. Download [ChromeDriver](https://chromedriver.chromium.org/downloads)
 2. See 2-5 for Firefox
+
+## Checkstyle setup
+
+1. See [Usage](https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)
+2. Integrate Google style check [here](https://maven.apache.org/plugins/maven-checkstyle-plugin/examples/custom-checker-config.html)
+
+```bash
+mvn checkstyle:checkstyle
+```
+

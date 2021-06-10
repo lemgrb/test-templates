@@ -2,3 +2,7 @@
 - https://github.com/saucelabs-training/demo-java/tree/master/selenium-cucumber-examples
 - https://maven.apache.org/surefire/maven-failsafe-plugin/usage.html
 - https://howtodoinjava.com/design-patterns/creational/builder-pattern-in-java/
+- https://maven.apache.org/plugins/maven-checkstyle-plugin/examples/custom-checker-config.html
+- https://cucumber.io/docs/guides/parallel-execution/
+- https://maven.apache.org/plugins/maven-checkstyle-plugin/examples/upgrading-checkstyle.html
+- https://maven.apache.org/plugins/maven-checkstyle-plugin/checkstyle-mojo.html
