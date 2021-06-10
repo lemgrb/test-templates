@@ -1,15 +1,17 @@
 package io.github.lemgrb.testtemplates.e2eweb.utilities;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Get properties.
+ */
 @Slf4j
 public class ProjectProperties {
 
@@ -21,10 +23,15 @@ public class ProjectProperties {
   @Setter
   private Properties properties = new Properties();
 
-  private Map<String, String> configMap = new HashMap<String, String>();
-
+  /**
+   * Read "environment" property from System environment variables
+   * and load it into a HashMap.
+   *
+   * @throws IOException Failed to read configuration file.
+   */
   public ProjectProperties() throws IOException {
 
+    Map<String, String> configMap = new HashMap<>();
     configMap.put("local", "config.local.properties");
     configMap.put("saucelabs", "config.saucelabs.properties");
 

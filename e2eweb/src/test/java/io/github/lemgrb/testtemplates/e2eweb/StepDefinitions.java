@@ -1,6 +1,12 @@
 package io.github.lemgrb.testtemplates.e2eweb;
 
-import com.saucelabs.saucebindings.*;
+import static org.junit.Assert.assertTrue;
+
+import com.saucelabs.saucebindings.Browser;
+import com.saucelabs.saucebindings.DataCenter;
+import com.saucelabs.saucebindings.SauceOptions;
+import com.saucelabs.saucebindings.SaucePlatform;
+import com.saucelabs.saucebindings.SauceSession;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -10,6 +16,9 @@ import io.cucumber.java.en.When;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ExcelTestDataReader;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ProjectProperties;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.TestData;
+import java.time.Duration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,13 +28,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.io.File;
-import java.time.Duration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.junit.Assert.assertTrue;
 
 @Slf4j
 public class StepDefinitions {
@@ -45,8 +47,9 @@ public class StepDefinitions {
   }
 
   public WebDriver getDriver() {
-    if (projectProperties.getEnvironment().equalsIgnoreCase("local"))
+    if (projectProperties.getEnvironment().equalsIgnoreCase("local")) {
       return driver;
+    }
     return getSession().getDriver();
   }
 
@@ -54,8 +57,9 @@ public class StepDefinitions {
   private String getFeatureName(String scenarioId) {
     Pattern pattern = Pattern.compile(".*/(.*).feature:[0-9]*");
     Matcher matcher = pattern.matcher(scenarioId);
-    if (matcher.find())
+    if (matcher.find()) {
       return matcher.group(1);
+    }
     return scenarioId;
   }
 
@@ -69,8 +73,12 @@ public class StepDefinitions {
 
     if (projectProperties.getEnvironment().equalsIgnoreCase("saucelabs")) {
 
-      log.info("▒▒▒ SAUCE_USERNAME: " + ((System.getenv("SAUCE_USERNAME") != null && !System.getenv("SAUCE_USERNAME").isBlank()) ? "SAUCE_USERNAME OK" : "SAUCE_USERNAME NOT FOUND!!!"));
-      log.info("▒▒▒ SAUCE_ACCESS_KEY: " + ((System.getenv("SAUCE_ACCESS_KEY") != null && !System.getenv("SAUCE_ACCESS_KEY").isBlank()) ? "SAUCE_ACCESS_KEY OK" : "SAUCE_ACCESS_KEY NOT FOUND!!!"));
+      log.info("▒▒▒ SAUCE_USERNAME: " + ((System.getenv("SAUCE_USERNAME") != null
+              && !System.getenv("SAUCE_USERNAME").isBlank())
+              ? "SAUCE_USERNAME OK" : "SAUCE_USERNAME NOT FOUND!!!"));
+      log.info("▒▒▒ SAUCE_ACCESS_KEY: " + ((System.getenv("SAUCE_ACCESS_KEY") != null
+              && !System.getenv("SAUCE_ACCESS_KEY").isBlank())
+              ? "SAUCE_ACCESS_KEY OK" : "SAUCE_ACCESS_KEY NOT FOUND!!!"));
 
       options.set(new SauceOptions());
       options.get().setName(scenario.getName());
@@ -163,13 +171,15 @@ public class StepDefinitions {
 
   @When("user clicks {string}")
   public void user_clicks(String label) {
-    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[contains(text(), '" + label + "')]")));
+    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//*[contains(text(), '" + label + "')]")));
     element.click();
   }
 
   @Then("{string} is displayed")
   public void textIsDisplayed(String text) {
-    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + text + "')]")));
+    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//*[contains(text(),'" + text + "')]")));
     assertTrue(element.isDisplayed());
   }
 
@@ -197,8 +207,10 @@ public class StepDefinitions {
             .build();
     String textToVerify = ExcelTestDataReader.getExcelTestDataReader().getTestData(testData);
     log.info("▒▒▒ textToVerify: " + textToVerify);
-    log.info("▒▒▒ LOCATOR: " + ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
-    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
+    log.info("▒▒▒ LOCATOR: " + ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
+    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
     assertTrue(element.isDisplayed());
   }
 
@@ -210,8 +222,9 @@ public class StepDefinitions {
         driver.close();
         driver.quit();
       } catch (Exception e) {
-        if (driver != null)
+        if (driver != null) {
           driver.quit();
+        }
       }
     } else {
       getSession().stop(!scenario.isFailed());
