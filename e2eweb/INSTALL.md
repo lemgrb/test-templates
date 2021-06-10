@@ -63,3 +63,4 @@ Source 2: [Driver requirements](https://www.selenium.dev/documentation/en/webdri
 ```bash
 mvn checkstyle:checkstyle
 ```
+
