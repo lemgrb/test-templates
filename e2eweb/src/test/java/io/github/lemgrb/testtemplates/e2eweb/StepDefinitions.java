@@ -67,6 +67,8 @@ public class StepDefinitions {
   public void setup(Scenario scenario) throws Exception {
     this.currentScenario = scenario.getName();
     this.currentFeature = getFeatureName(scenario.getId());
+    log.info("▒▒▒  Thread ID: " + Thread.currentThread().getId());
+    log.info("▒▒▒  Current feature: " + getFeatureName(scenario.getId()));
 
     projectProperties = new ProjectProperties();
     excelTestDataReader = ExcelTestDataReader.getExcelTestDataReader();

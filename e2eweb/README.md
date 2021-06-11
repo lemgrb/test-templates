@@ -84,12 +84,21 @@ mvn -Dcucumber.filter.tags="@internet" failsafe:integration-test
 
 ### Putting them all together
 
-Run all Gherkin Scenarios tagged as `@internet` on Saucelabs
+Run all Gherkin Scenarios tagged as `@internet` on Saucelabs:
 
 ```bash
 mvn -Dcucumber.filter.tags="@internet" \
 -Denvironment=saucelabs \
 -Dplatform=mac_sierra_chrome \
+ clean test failsafe:integration-test
+```
+
+Run all Gherkin Scenarios tagged as `@internet` locally:
+
+```bash
+mvn -Dcucumber.filter.tags="@internet" \
+-Denvironment=local \
+-Dplatform=firefox \
  clean test failsafe:integration-test
 ```
 
@@ -100,3 +109,23 @@ The Excel test data is located at `src/test/resources/TestData.xlsx`.
 Current limitation: 
 - **All cells must be formatted as String**
 - Every row must have equal number of columns
+
+## Parallel execution with Junit + Failsafe
+
+Failsafe plugin is used for parallel execution. See `pom.xml` file.
+The relevant settings are the following:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-failsafe-plugin</artifactId>
+    ...
+    <configuration>
+        <systemPropertyVariables>
+            <environment>local</environment>
+        </systemPropertyVariables>
+        <parallel>methods</parallel>
+        <threadCount>4</threadCount>
+    </configuration>
+</plugin>
+```

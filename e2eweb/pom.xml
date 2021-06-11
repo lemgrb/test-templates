@@ -135,6 +135,8 @@
                     <systemPropertyVariables>
                         <environment>local</environment>
                     </systemPropertyVariables>
+                    <parallel>methods</parallel>
+                    <threadCount>4</threadCount>
                 </configuration>
             </plugin>
         </plugins>

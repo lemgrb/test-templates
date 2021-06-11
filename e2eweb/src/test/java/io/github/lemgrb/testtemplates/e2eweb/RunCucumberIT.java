@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
  */
 @Slf4j
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "html:target/cucumber-report.html"})
+@CucumberOptions(plugin = {"pretty", "html:target/cucumber-report.html", "timeline:target/"})
 public class RunCucumberIT {
 
 }

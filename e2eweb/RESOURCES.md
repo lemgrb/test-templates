@@ -6,3 +6,6 @@
 - https://cucumber.io/docs/guides/parallel-execution/
 - https://maven.apache.org/plugins/maven-checkstyle-plugin/examples/upgrading-checkstyle.html
 - https://maven.apache.org/plugins/maven-checkstyle-plugin/checkstyle-mojo.html
+## Parallel execution
+- https://maven.apache.org/surefire/maven-failsafe-plugin/examples/fork-options-and-parallel-execution.html
+- https://cucumber.io/docs/guides/parallel-execution/
