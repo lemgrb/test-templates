@@ -16,6 +16,8 @@ import io.cucumber.java.en.When;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ExcelTestDataReader;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ProjectProperties;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.TestData;
+
+import java.net.URL;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,8 +26,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -47,7 +53,8 @@ public class StepDefinitions {
   }
 
   public WebDriver getDriver() {
-    if (projectProperties.getEnvironment().equalsIgnoreCase("local")) {
+    if (projectProperties.getEnvironment().equalsIgnoreCase("local")
+      || projectProperties.getEnvironment().equalsIgnoreCase("remote")) {
       return driver;
     }
     return getSession().getDriver();
@@ -96,6 +103,8 @@ public class StepDefinitions {
         platform = "default";
       }
 
+      log.info("▒▒▒ PLATFORM: " + platform);
+
       switch (platform) {
         case "windows_10_edge":
           options.get().setPlatformName(SaucePlatform.WINDOWS_10);
@@ -136,6 +145,8 @@ public class StepDefinitions {
         platform = "chrome";
       }
 
+      log.info("▒▒▒ PLATFORM: " + platform);
+
       switch (platform) {
         case "firefox":
           driver = new FirefoxDriver();
@@ -147,10 +158,36 @@ public class StepDefinitions {
           driver = new ChromeDriver();
           break;
       }
+    } else if (projectProperties.getEnvironment().equalsIgnoreCase("remote")) {
+      String platform;
+      if (System.getProperty("platform") != null) {
+        platform = System.getProperty("platform");
+      } else {
+        platform = "firefox";
+      }
 
+      log.info("▒▒▒ PLATFORM: " + platform);
+      log.info("▒▒▒ HOST AND PORT: " +projectProperties.getProperties().getProperty("HOST_AND_PORT"));
+
+      URL remoteURL = new URL(projectProperties.getProperties().getProperty("HOST_AND_PORT"));
+
+      switch (platform) {
+        case "edge":
+          driver = new RemoteWebDriver(remoteURL, new EdgeOptions());
+          break;
+        case "chrome":
+          driver = new RemoteWebDriver(remoteURL, new ChromeOptions());
+          break;
+        case "firefox":
+        default:
+          driver = new RemoteWebDriver(remoteURL, new FirefoxOptions());
+          break;
+      }
     }
 
-    wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+
+  wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
     getDriver().manage().window().maximize();
   }
 
@@ -219,7 +256,8 @@ public class StepDefinitions {
 
   @After
   public void tearDown(Scenario scenario) {
-    if (projectProperties.getEnvironment().equalsIgnoreCase("local")) {
+    if (projectProperties.getEnvironment().equalsIgnoreCase("local") 
+      || projectProperties.getEnvironment().equalsIgnoreCase("remote")){
       try {
         driver.close();
         driver.quit();

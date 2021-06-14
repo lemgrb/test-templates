@@ -12,7 +12,7 @@ Feature: Health check
     Then "<textToVerify>" is displayed
 
     Examples:
-      | website                                           | textToVerify        |
-      | https://webdriver.io                              | Follow @webdriverio |
-      | https://www.google.com/ncr                        | Cookies             |
-      | https://strapi-starter-next-ecommerce.vercel.app/ | $0.00               |
+      | website                                           | textToVerify                      |
+      | https://webdriver.io                              | Follow @webdriverio               |
+      | https://www.kickstart.ph                          | We fund the future we believe in. |
+      | https://strapi-starter-next-ecommerce.vercel.app/ | $0.00                             |

@@ -34,6 +34,7 @@ public class ProjectProperties {
     Map<String, String> configMap = new HashMap<>();
     configMap.put("local", "config.local.properties");
     configMap.put("saucelabs", "config.saucelabs.properties");
+    configMap.put("remote", "config.remote.properties");
 
     // `environment` is read from POM.XML
 

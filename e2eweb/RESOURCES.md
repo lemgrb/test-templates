@@ -9,3 +9,4 @@
 ## Parallel execution
 - https://maven.apache.org/surefire/maven-failsafe-plugin/examples/fork-options-and-parallel-execution.html
 - https://cucumber.io/docs/guides/parallel-execution/
+- https://github.com/SeleniumHQ/docker-selenium
