@@ -112,6 +112,11 @@ Current limitation:
 
 ## Parallel execution with Junit + Failsafe
 
+Current implementation: 
+
+- 1 browser per script execution `mvn failsafe:integration-test -Dplatform=chrome`
+- 1 feature file : 1 Thread
+
 Failsafe plugin is used for parallel execution. See `pom.xml` file.
 The relevant settings are the following:
 
