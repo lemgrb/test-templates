@@ -84,12 +84,30 @@ mvn -Dcucumber.filter.tags="@internet" failsafe:integration-test
 
 ### Putting them all together
 
-Run all Gherkin Scenarios tagged as `@internet` on Saucelabs
+Run all Gherkin Scenarios tagged as `@internet` on Saucelabs:
 
 ```bash
 mvn -Dcucumber.filter.tags="@internet" \
 -Denvironment=saucelabs \
 -Dplatform=mac_sierra_chrome \
+ clean test failsafe:integration-test
+```
+
+Run all Gherkin Scenarios tagged as `@internet` locally:
+
+```bash
+mvn -Dcucumber.filter.tags="@internet" \
+-Denvironment=local \
+-Dplatform=firefox \
+ clean test failsafe:integration-test
+```
+
+Run all Gherkin Scenarios tagged as `@internet` on remote server:
+
+```bash
+mvn -Dcucumber.filter.tags="@internet" \
+-Denvironment=remote \
+-Dplatform=firefox \
  clean test failsafe:integration-test
 ```
 
@@ -100,3 +118,57 @@ The Excel test data is located at `src/test/resources/TestData.xlsx`.
 Current limitation: 
 - **All cells must be formatted as String**
 - Every row must have equal number of columns
+
+## Parallel execution with Junit + Failsafe
+
+Current implementation: 
+
+- 1 browser per script execution `mvn failsafe:integration-test -Dplatform=chrome`
+- 1 feature file : 1 Thread
+
+Failsafe plugin is used for parallel execution. See `pom.xml` file.
+The relevant settings are the following:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-failsafe-plugin</artifactId>
+    ...
+    <configuration>
+        <systemPropertyVariables>
+            <environment>local</environment>
+        </systemPropertyVariables>
+        <parallel>methods</parallel>
+        <threadCount>4</threadCount>
+    </configuration>
+</plugin>
+```
+
+## Selenium Grid
+- Setup grid using docker-compose [Docker compose](https://github.com/SeleniumHQ/docker-selenium#docker-compose)
+- [Increase concurrency per container](https://github.com/SeleniumHQ/docker-selenium#increasing-session-concurrency-per-container)
+Example:
+```yaml
+  1 # To execute this docker-compose yml file use `docker-compose -f docker-compose-v3.yml up`
+  2 # Add the `-d` flag at the end for detached execution
+  3 # To stop the execution, hit Ctrl+C, and then `docker-compose -f docker-compose-v3.yml down`
+  4 version: "3"
+  5 services:
+  6   chrome:
+  7     image: selenium/node-chrome:4.0.0-beta-4-20210608
+  8     volumes:
+  9       - /dev/shm:/dev/shm
+ 10     depends_on:
+ 11       - selenium-hub
+ 12     environment:
+ 13       - SE_EVENT_BUS_HOST=selenium-hub
+ 14       - SE_EVENT_BUS_PUBLISH_PORT=4442
+ 15       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+ 16       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+ 17       - SE_NODE_MAX_SESSIONS=2
+
+```
+
+```bash
+$ sudo docker-compose up
+```
