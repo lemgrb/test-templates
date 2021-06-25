@@ -25,5 +25,6 @@ hs_err_pid*
 # Intellij
 */.idea
 /e2eweb/.idea
+/e2eweb/SCREENSHOT*
 */target
 *.iml

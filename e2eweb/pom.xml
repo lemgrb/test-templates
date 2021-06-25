@@ -95,6 +95,12 @@
             <version>5.0.0</version>
         </dependency>
 
+        <!-- The ff. are used for Unit testing class Screenshoter -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>htmlunit-driver</artifactId>
+            <version>2.50.0</version>
+        </dependency>
     </dependencies>
 
     <build>

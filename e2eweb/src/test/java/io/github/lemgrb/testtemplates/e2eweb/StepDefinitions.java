@@ -15,6 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ExcelTestDataReader;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ProjectProperties;
+import io.github.lemgrb.testtemplates.e2eweb.utilities.Screenshoter;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.TestData;
 
 import java.net.URL;
@@ -219,6 +220,7 @@ public class StepDefinitions {
   public void textIsDisplayed(String text) {
     WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//*[contains(text(),'" + text + "')]")));
+    Screenshoter.getScreenshoterInstance(projectProperties).takeScreenshot(getDriver(), currentFeature, currentScenario);
     assertTrue(element.isDisplayed());
   }
 
@@ -250,6 +252,7 @@ public class StepDefinitions {
             By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
     WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
+    Screenshoter.getScreenshoterInstance(projectProperties).takeScreenshot(getDriver(), currentFeature, currentScenario);
     assertTrue(element.isDisplayed());
   }
 

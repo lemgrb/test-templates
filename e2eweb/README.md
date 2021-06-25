@@ -172,3 +172,16 @@ Example:
 ```bash
 $ sudo docker-compose up
 ```
+
+## Screenshots
+
+Use the `Screenshoter.takeScreenshot()` method to take screenshot.
+
+Limitations:
+
+1. Feature names must be <255 characters and use only characters valid as file names.
+2. Scenario names must be <255 characters and use only characters valid as file names.
+
+TODO: Unit tests that works on Github Actions
+
+NOTE: @Ignore was added so it won't run on github actions.
