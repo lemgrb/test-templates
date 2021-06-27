@@ -47,7 +47,7 @@ public class StepDefinitions {
   protected String currentFeature;
 
   protected static ThreadLocal<SauceSession> session = new ThreadLocal<>();
-  protected static ThreadLocal<SauceOptions> options = new ThreadLocal<>();
+  protected static ThreadLocal<SauceOptions> sauceOptions = new ThreadLocal<>();
 
   public SauceSession getSession() {
     return session.get();
@@ -90,11 +90,11 @@ public class StepDefinitions {
               && !System.getenv("SAUCE_ACCESS_KEY").isBlank())
               ? "SAUCE_ACCESS_KEY OK" : "SAUCE_ACCESS_KEY NOT FOUND!!!"));
 
-      options.set(new SauceOptions());
-      options.get().setName(scenario.getName());
+      sauceOptions.set(new SauceOptions());
+      sauceOptions.get().setName(scenario.getName());
 
       if (System.getenv("START_TIME") != null) {
-        options.get().setBuild("Build Time: " + System.getenv("START_TIME"));
+        sauceOptions.get().setBuild("Build Time: " + System.getenv("START_TIME"));
       }
 
       String platform;
@@ -108,31 +108,31 @@ public class StepDefinitions {
 
       switch (platform) {
         case "windows_10_edge":
-          options.get().setPlatformName(SaucePlatform.WINDOWS_10);
-          options.get().setBrowserName(Browser.EDGE);
+          sauceOptions.get().setPlatformName(SaucePlatform.WINDOWS_10);
+          sauceOptions.get().setBrowserName(Browser.EDGE);
           break;
         case "mac_sierra_chrome":
-          options.get().setPlatformName(SaucePlatform.MAC_SIERRA);
-          options.get().setBrowserName(Browser.CHROME);
+          sauceOptions.get().setPlatformName(SaucePlatform.MAC_SIERRA);
+          sauceOptions.get().setBrowserName(Browser.CHROME);
           break;
         case "windows_8_ff":
-          options.get().setPlatformName(SaucePlatform.WINDOWS_8);
-          options.get().setBrowserName(Browser.FIREFOX);
+          sauceOptions.get().setPlatformName(SaucePlatform.WINDOWS_8);
+          sauceOptions.get().setBrowserName(Browser.FIREFOX);
           break;
         case "windows_8_1_ie":
-          options.get().setPlatformName(SaucePlatform.WINDOWS_8_1);
-          options.get().setBrowserName(Browser.INTERNET_EXPLORER);
+          sauceOptions.get().setPlatformName(SaucePlatform.WINDOWS_8_1);
+          sauceOptions.get().setBrowserName(Browser.INTERNET_EXPLORER);
           break;
         case "mac_mojave_safari":
-          options.get().setPlatformName(SaucePlatform.MAC_MOJAVE);
-          options.get().setBrowserName(Browser.SAFARI);
+          sauceOptions.get().setPlatformName(SaucePlatform.MAC_MOJAVE);
+          sauceOptions.get().setBrowserName(Browser.SAFARI);
           break;
         default:
           // accept Sauce defaults
           break;
       }
 
-      SauceSession sauceSession = new SauceSession(options.get());
+      SauceSession sauceSession = new SauceSession(sauceOptions.get());
       sauceSession.setDataCenter(DataCenter.EU_CENTRAL);
 
       session.set(sauceSession);
@@ -174,14 +174,26 @@ public class StepDefinitions {
 
       switch (platform) {
         case "edge":
-          driver = new RemoteWebDriver(remoteURL, new EdgeOptions());
+          EdgeOptions edgeOptions = new EdgeOptions();
+          edgeOptions.setCapability("se:recordVideo", true);
+          edgeOptions.setCapability("se:timeZone", "Asia/Manila");
+          edgeOptions.setCapability("se:screenResolution", "1920x1080");
+          driver = new RemoteWebDriver(remoteURL, edgeOptions);
           break;
         case "chrome":
-          driver = new RemoteWebDriver(remoteURL, new ChromeOptions());
+          ChromeOptions options = new ChromeOptions();
+          options.setCapability("se:recordVideo", true);
+          options.setCapability("se:timeZone", "Asia/Manila");
+          options.setCapability("se:screenResolution", "1920x1080");
+          driver = new RemoteWebDriver(remoteURL, options);
           break;
         case "firefox":
         default:
-          driver = new RemoteWebDriver(remoteURL, new FirefoxOptions());
+          FirefoxOptions firefoxOptions = new FirefoxOptions();
+          firefoxOptions.setCapability("se:recordVideo", true);
+          firefoxOptions.setCapability("se:timeZone", "Asia/Manila");
+          firefoxOptions.setCapability("se:screenResolution", "1920x1080");
+          driver = new RemoteWebDriver(remoteURL, firefoxOptions);
           break;
       }
     }
