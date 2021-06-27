@@ -1,5 +1,9 @@
 package io.github.lemgrb.testtemplates.e2eweb.utilities;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -7,11 +11,9 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+/**
+ * Unit Test class for Screenshoter.java
+ */
 @Slf4j
 public class ScreenshoterTest {
 
@@ -27,11 +29,11 @@ public class ScreenshoterTest {
     String date = format.format(new Date());
     WebDriver driver = new ChromeDriver();
     Screenshoter screenshot = Screenshoter.getScreenshoterInstance(properties);
-    String fileName = "SCREENSHOTS_" + date + "/Feature one/Scenario one.png";
+    final String fileName = "SCREENSHOTS_" + date + "/Feature one/Scenario one.png";
 
     // Act
     driver.get("https://www.google.com");
-    screenshot.takeScreenshot(driver, feature, scenario );
+    screenshot.takeScreenshot(driver, feature, scenario);
 
     // Assert
     driver.quit();
@@ -45,7 +47,11 @@ public class ScreenshoterTest {
     ProjectProperties properties = new ProjectProperties();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    String feature = "FEATURE This is an example 256 character feature name. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non consectetur justo. Suspendisse eleifend, ex eget convallis pharetra, nulla sapien fermentum orci, tempus fermentum nisi eros sit amet diam. Quisque faucibus sem at congue finibus. Fusce sed lacinia lacus, et suscipit mauris. Donec nec lacinia elit, in interdum mi.";
+    String feature = "FEATURE This is an example 256 character feature name. Lorem ipsum dolor "
+            + " sit amet, consectetur adipiscing elit. Quisque non consectetur justo. Suspendisse"
+            + " eleifend, ex eget convallis pharetra, nulla sapien fermentum orci, tempus "
+            + "fermentum nisi eros sit amet diam. Quisque faucibus sem at congue finibus. Fusce "
+            + "sed lacinia lacus, et suscipit mauris. Donec nec lacinia elit, in interdum mi.";
     String scenario = "Scenario one";
     String date = format.format(new Date());
     WebDriver driver = new ChromeDriver();
@@ -53,9 +59,10 @@ public class ScreenshoterTest {
 
     // Act
     driver.get("https://www.google.com");
-    screenshot.takeScreenshot(driver, feature, scenario );
+    screenshot.takeScreenshot(driver, feature, scenario);
 
-    // Assert = No exception will be thrown. The IOException filename too long is catched and just logged in console.
+    // Assert = No exception will be thrown. The IOException filename too long is catched
+    // and just logged in console.
     // TODO: [Optional] test if logged.  
     driver.quit();
   }

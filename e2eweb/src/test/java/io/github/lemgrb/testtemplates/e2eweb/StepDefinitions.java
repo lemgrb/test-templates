@@ -17,7 +17,6 @@ import io.github.lemgrb.testtemplates.e2eweb.utilities.ExcelTestDataReader;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ProjectProperties;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.Screenshoter;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.TestData;
-
 import java.net.URL;
 import java.time.Duration;
 import java.util.regex.Matcher;
@@ -55,7 +54,7 @@ public class StepDefinitions {
 
   public WebDriver getDriver() {
     if (projectProperties.getEnvironment().equalsIgnoreCase("local")
-      || projectProperties.getEnvironment().equalsIgnoreCase("remote")) {
+            || projectProperties.getEnvironment().equalsIgnoreCase("remote")) {
       return driver;
     }
     return getSession().getDriver();
@@ -168,7 +167,8 @@ public class StepDefinitions {
       }
 
       log.info("▒▒▒ PLATFORM: " + platform);
-      log.info("▒▒▒ HOST AND PORT: " +projectProperties.getProperties().getProperty("HOST_AND_PORT"));
+      log.info("▒▒▒ HOST AND PORT: "
+              + projectProperties.getProperties().getProperty("HOST_AND_PORT"));
 
       URL remoteURL = new URL(projectProperties.getProperties().getProperty("HOST_AND_PORT"));
 
@@ -200,7 +200,7 @@ public class StepDefinitions {
 
 
 
-  wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+    wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
     getDriver().manage().window().maximize();
   }
 
@@ -232,7 +232,8 @@ public class StepDefinitions {
   public void textIsDisplayed(String text) {
     WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//*[contains(text(),'" + text + "')]")));
-    Screenshoter.getScreenshoterInstance(projectProperties).takeScreenshot(getDriver(), currentFeature, currentScenario);
+    Screenshoter.getScreenshoterInstance(projectProperties)
+            .takeScreenshot(getDriver(), currentFeature, currentScenario);
     assertTrue(element.isDisplayed());
   }
 
@@ -264,15 +265,16 @@ public class StepDefinitions {
             By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
     WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//*[contains(text(),'" + textToVerify + "')]")));
-    Screenshoter.getScreenshoterInstance(projectProperties).takeScreenshot(getDriver(), currentFeature, currentScenario);
+    Screenshoter.getScreenshoterInstance(projectProperties)
+            .takeScreenshot(getDriver(), currentFeature, currentScenario);
     assertTrue(element.isDisplayed());
   }
 
 
   @After
   public void tearDown(Scenario scenario) {
-    if (projectProperties.getEnvironment().equalsIgnoreCase("local") 
-      || projectProperties.getEnvironment().equalsIgnoreCase("remote")){
+    if (projectProperties.getEnvironment().equalsIgnoreCase("local")
+            || projectProperties.getEnvironment().equalsIgnoreCase("remote")) {
       try {
         driver.close();
         driver.quit();
