@@ -1,21 +1,20 @@
 package io.github.lemgrb.testtemplates.e2eweb.utilities;
 
-import lombok.Getter;
-import lombok.Setter;
+import static org.monte.media.FormatKeys.*;
+import static org.monte.media.VideoFormatKeys.*;
+
+import java.awt.AWTException;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.monte.media.Format;
 import org.monte.media.FormatKeys;
 import org.monte.media.math.Rational;
 import org.monte.screenrecorder.ScreenRecorder;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static org.monte.media.FormatKeys.*;
-import static org.monte.media.VideoFormatKeys.*;
 
 /**
  * Utility class to take screenshots.
@@ -30,7 +29,8 @@ public class VideoRecorder {
   private String scenarioName;
   private static VideoRecorder single_instance;
 
-  public VideoRecorder(ProjectProperties properties, String featureName, String scenarioName) throws IOException, AWTException {
+  public VideoRecorder(ProjectProperties properties, String featureName, String scenarioName)
+          throws IOException, AWTException {
     this.properties = properties;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String date = format.format(new Date());

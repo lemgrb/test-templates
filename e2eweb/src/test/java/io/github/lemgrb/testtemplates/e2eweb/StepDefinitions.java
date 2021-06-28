@@ -17,15 +17,12 @@ import io.github.lemgrb.testtemplates.e2eweb.utilities.ExcelTestDataReader;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.ProjectProperties;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.Screenshoter;
 import io.github.lemgrb.testtemplates.e2eweb.utilities.TestData;
-
-import java.awt.*;
+import io.github.lemgrb.testtemplates.e2eweb.utilities.VideoRecorder;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import io.github.lemgrb.testtemplates.e2eweb.utilities.VideoRecorder;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -281,7 +278,7 @@ public class StepDefinitions {
 
 
   @After
-  public void tearDown(Scenario scenario) throws IOException, AWTException {
+  public void tearDown(Scenario scenario) throws IOException {
     if (projectProperties.getEnvironment().equalsIgnoreCase("local")
             || projectProperties.getEnvironment().equalsIgnoreCase("remote")) {
       try {
