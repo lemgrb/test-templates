@@ -21,6 +21,12 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Download monte media library
+      uses: wei/wget@v1
+      with: 
+        args: -O MonteScreenRecorder.jar http://www.randelshofer.ch/monte/files/demos/MonteScreenRecorder.jar
+    - name: Install monte media library in maven repo
+      run: mvn install:install-file -Dfile=./MonteScreenRecorder.jar -DgroupId=org.monte -DartifactId=montemedia -Dversion=0.7.7 -Dpackaging=jar
     - name: Unit test with Maven
       working-directory: ./e2eweb
       run: mvn clean test     
