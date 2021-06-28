@@ -185,3 +185,15 @@ Limitations:
 TODO: Unit tests that works on Github Actions
 
 NOTE: @Ignore was added so it won't run on github actions.
+
+## Screen recordings
+
+Install the .jar file in local maven repo:
+
+```bash
+mvn install:install-file -Dfile=/home/tawing/github/MonteScreenRecorder.jar -DgroupId=org.monte -DartifactId=montemedia -Dversion=0.7.7 -Dpackaging=jar
+```
+
+Limitations:
+
+1. parallel=none in `pom.xml`

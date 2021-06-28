@@ -26,5 +26,6 @@ hs_err_pid*
 */.idea
 /e2eweb/.idea
 /e2eweb/SCREENSHOT*
+/e2eweb/RECORD*
 */target
 *.iml

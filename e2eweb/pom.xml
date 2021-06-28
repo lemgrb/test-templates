@@ -101,6 +101,13 @@
             <artifactId>htmlunit-driver</artifactId>
             <version>2.50.0</version>
         </dependency>
+
+        <!-- The ff. are used for screen recordings -->
+        <dependency>
+            <groupId>org.monte</groupId>
+            <artifactId>montemedia</artifactId>
+            <version>0.7.7</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -141,7 +148,7 @@
                     <systemPropertyVariables>
                         <environment>local</environment>
                     </systemPropertyVariables>
-                    <parallel>methods</parallel>
+                    <parallel>none</parallel>
                     <threadCount>4</threadCount>
                 </configuration>
             </plugin>
